@@ -1,7 +1,7 @@
 from typing import Dict
 import string
 import matplotlib.pyplot as plt
-    
+
 
 def assign_coordinates(starting_position: tuple, spacing: int) -> Dict:
     """ Assigns coordinates to the points 
@@ -18,8 +18,8 @@ def assign_coordinates(starting_position: tuple, spacing: int) -> Dict:
     grid_coordinates = {}
 
     for letter in string.ascii_uppercase:
-        # TODO break long lines
-        y = int(starting_position[1]) - ((string.ascii_uppercase.index(letter)) * spacing)
+        y = int(starting_position[1]) - ((string.ascii_uppercase.index(letter))
+                * spacing)
 
         if letter == "I":
             break
@@ -34,14 +34,14 @@ def assign_coordinates(starting_position: tuple, spacing: int) -> Dict:
 
 
 def get_location(grid: Dict, point: str) -> tuple:
-    """ Prints the location of the requested point
+    """ Returns the coordinates of the requested point
 
         Args:
             grid (Dict): Dictionary of point names and coordinates
             point (str): Point name
 
         Returns: 
-            1 if error
+            (x, y) (tuple): Coordinates of the desired points
     """
 
     x, y = grid[point]
@@ -111,11 +111,12 @@ if __name__ == "__main__":
             spacing = -1
 
     # Make the grid
-    grid = assign_coordinates((int(starting_x_pos), int(starting_y_pos)), int(spacing))
+    grid = assign_coordinates((int(starting_x_pos), int(starting_y_pos)), 
+        int(spacing))
 
     # Ask if user wants to show map
-    show_map = input("Show map? (Y/N) ")
-    if show_map == "Y":
+    show_map = input("Show map? (y/n) ")
+    if show_map == "y":
         print_grid(grid)
     
     # Get location of a desired point
