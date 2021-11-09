@@ -1,7 +1,7 @@
 from typing import Dict
 import string
 import matplotlib.pyplot as plt
-
+    
 
 def assign_coordinates(starting_position: tuple, spacing: int) -> Dict:
     """ Assigns coordinates to the points 
@@ -18,63 +18,113 @@ def assign_coordinates(starting_position: tuple, spacing: int) -> Dict:
     grid_coordinates = {}
 
     for letter in string.ascii_uppercase:
-        y = int(starting_position[1]) + ((string.ascii_uppercase.index(letter)) * spacing)
+        # TODO break long lines
+        y = int(starting_position[1]) - ((string.ascii_uppercase.index(letter)) * spacing)
 
         if letter == "I":
             break
 
         for i in range(1, 13):
-            x = int(starting_position[0]) - (i - 1) * spacing
+            x = int(starting_position[0]) + ((i - 1) * spacing)
             point_name = letter + str(i) 
             grid_coordinates[point_name] = (x,y)
             
-    print(grid_coordinates)
+    # print(grid_coordinates)
     return grid_coordinates
 
 
-def print_location(grid: Dict, point: str):
+def get_location(grid: Dict, point: str) -> tuple:
     """ Prints the location of the requested point
 
         Args:
             grid (Dict): Dictionary of point names and coordinates
             point (str): Point name
 
-        Returns: none
+        Returns: 
+            1 if error
     """
 
     x, y = grid[point]
 
-    print( str(x) + ", " + str(y))
+    return (x, y)
 
 
 def print_grid(grid: Dict):
-    """[summary]
+    """ Displays the grid in a simple graph
 
     Args:
         grid (Dict): [description]
 
-    Returns:
+    Returns: none
 
     """
-    coordinates = [(x, y) for x, y in grid[1]]
+
+    # print(grid)
+    coordinates = []
+    for coordinate in grid.values():
+        coordinates.append(coordinate)
+
     plt.scatter(*zip(*coordinates))
 
-    for i, name in enumerate(grid):
-        plt.annotate(name, (grid[i][name], grid[i][name]))
+    for name in grid:
+        plt.annotate(name, (grid[name][0], grid[name][1]))
+
+    plt.show()
 
 
 if __name__ == "__main__":
-
-    ## TODO errors 
     
-    starting_x_pos = input("Select starting x position for A1: ")
-    starting_y_pos = input("Select starting y position for A1: ")
+    point_err_mess = "Value should be an integer in the range [-1000, 1000]."
+    starting_x_pos = None
+    while (starting_x_pos == None):
+        try: 
+            starting_x_pos = int(input("Select starting x position for A1: "))
 
-    spacing = input("Select spacing for x and y: ")
-    grid = assign_coordinates( (int(starting_x_pos), int(starting_y_pos)), int(spacing))
+            if (starting_x_pos > 1000) or (starting_x_pos < -1000): 
+                print(point_err_mess) 
+                starting_x_pos = None
 
-    print_grid(grid)
+        except ValueError:
+            print(point_err_mess) 
+            starting_x_pos = None
 
-    point = input("Which point do you want to locate in this grid? ")   # show grid
+    starting_y_pos = None
+    while (starting_y_pos == None):
+        try: 
+            starting_y_pos = int(input("Select starting y position for A1: "))
 
-    print_location(grid, point)
+            if (starting_x_pos > 1000) or (starting_x_pos < -1000): 
+                print(point_err_mess) 
+                starting_y_pos = None
+
+        except ValueError:
+            print(point_err_mess) 
+            starting_y_pos = None
+
+    spacing = -1
+    while (spacing <= 0):
+        try: 
+            spacing = int(input("Select spacing for x and y: "))
+
+        except ValueError:
+            print("Spacing should be a positive integer.") 
+            spacing = -1
+
+    # Make the grid
+    grid = assign_coordinates((int(starting_x_pos), int(starting_y_pos)), int(spacing))
+
+    # Ask if user wants to show map
+    show_map = input("Show map? (Y/N) ")
+    if show_map == "Y":
+        print_grid(grid)
+    
+    # Get location of a desired point
+    location = (None, None)
+    while (location == (None, None)):
+        try: 
+            point = input("Which point do you want to locate in this grid? ")
+            location = get_location(grid, point)
+            print(location)
+        except KeyError:
+            print("Please enter any point name from A1, A2, A3,..., H12.")
+

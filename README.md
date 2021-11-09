@@ -9,8 +9,10 @@
 
 
 ## Usage
-``` python3 main.py
+Run the program: python3 main.py
 
+The user has to answer the following prompt questions:
+``` 
 Select starting x position for A1: (enter any value from [-1000, 1000])
 
 Select starting y position for A1: (enter any value from [-1000, 1000])
